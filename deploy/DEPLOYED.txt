@@ -1,0 +1,7 @@
+Hotel Booking System — deployed Fri May 22 18:57:01 +03 2026
+---------------------------------------------
+Frontend (UI)   : https://frontend.mangowater-b28dd996.swedencentral.azurecontainerapps.io
+API Gateway     : https://api-gateway.mangowater-b28dd996.swedencentral.azurecontainerapps.io/v1/health
+RabbitMQ console: http://rabbitmq-se4458bb1.swedencentral.azurecontainer.io:15672  (guest/guest)
+
+Paste these into README.md section 1.

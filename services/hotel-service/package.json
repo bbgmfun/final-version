@@ -1,0 +1,22 @@
+{
+  "name": "hotel-service",
+  "version": "1.0.0",
+  "description": "Hotel admin, search and booking service",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "ioredis": "^5.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.1.0",
+    "mongoose": "^8.5.1",
+    "morgan": "^1.10.0"
+  }
+}

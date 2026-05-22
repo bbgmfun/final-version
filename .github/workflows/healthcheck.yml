@@ -1,0 +1,19 @@
+name: Scheduled Healthchecks
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # every 15 minutes
+  workflow_dispatch: {}
+
+jobs:
+  ping-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check API gateway health
+        run: |
+          set -e
+          echo "Checking API Gateway health..."
+          curl -fS --max-time 10 https://api-gateway.mangowater-b28dd996.swedencentral.azurecontainerapps.io/v1/health || (echo 'API health check failed' && exit 1)
+      - name: Check frontend
+        run: |
+          curl -fS --max-time 10 https://frontend.mangowater-b28dd996.swedencentral.azurecontainerapps.io/ || (echo 'Frontend unreachable' && exit 1)

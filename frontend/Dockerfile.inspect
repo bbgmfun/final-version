@@ -1,0 +1,6 @@
+FROM nginx:1.27-alpine
+COPY src /usr/share/nginx/html
+RUN ls -la /usr/share/nginx/html || true
+RUN echo '--- APP.JS ---' && sed -n '1,240p' /usr/share/nginx/html/app.js || true
+RUN echo '--- STYLES ---' && sed -n '1,240p' /usr/share/nginx/html/styles.css || true
+EXPOSE 80

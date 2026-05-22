@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurora Stays — Hotel Booking</title>
+
+  <!-- Entra ID config. Override these for a cloud deployment without rebuilding JS. -->
+  <meta name="entra-client-id" content="9549924f-8527-4327-8761-57cfde23985b" />
+  <meta name="entra-tenant-id" content="e7c46463-2529-40d9-b0e5-4b8a4acd39dd" />
+  <!-- API gateway base URL. Points at the deployed Azure gateway. -->
+  <meta name="api-base" content="https://api-gateway.mangowater-b28dd996.swedencentral.azurecontainerapps.io" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand" data-route="search">
+      <span class="logo">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4" />
+        </svg>
+      </span>
+      <span class="name">Aurora<span>Stays</span></span>
+    </div>
+    <nav class="links">
+      <a href="#" data-route="search">Otel Ara</a>
+      <a href="#" data-route="reservations">Rezervasyonlarım</a>
+      <a href="#" data-route="notifications">Bildirimler</a>
+      <a href="#" data-route="recent">Son Aramalarım</a>
+      <a href="#" data-route="admin">Admin</a>
+    </nav>
+    <div class="auth">
+      <span id="who" class="who"></span>
+      <button id="loginBtn" class="btn btn-primary">Microsoft ile Giriş</button>
+      <button id="logoutBtn" class="btn" hidden>Çıkış</button>
+    </div>
+  </header>
+
+  <main id="app"></main>
+
+  <!-- AI Assistant -->
+  <button id="chatToggle" class="chat-toggle" title="AI Asistan">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+    Asistan
+  </button>
+
+  <aside id="chatPanel" class="chat-panel" hidden>
+    <header>
+      <div class="title">
+        <strong>Aurora Asistan</strong>
+        <span class="status">Çevrimiçi</span>
+      </div>
+      <button id="chatClose" class="btn btn-ghost" style="color:#fff">Kapat</button>
+    </header>
+    <div id="chatLog" class="chat-log"></div>
+    <form id="chatForm" class="chat-form">
+      <input id="chatInput" autocomplete="off" placeholder="Rome 15-18 Temmuz, 2 misafir, havuz..." />
+      <button class="btn btn-primary">Gönder</button>
+    </form>
+  </aside>
+
+  <!-- Microsoft Authentication Library (MSAL) for Entra ID -->
+  <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3/lib/msal-browser.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="./app.js"></script>
+</body>
+</html>

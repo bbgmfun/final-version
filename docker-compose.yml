@@ -1,0 +1,129 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: hb-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: hb-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: hb-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  iam-service:
+    build: ./services/iam-service
+    container_name: hb-iam
+    env_file: .env
+    environment:
+      PORT: ${IAM_PORT}
+    ports:
+      - "${IAM_PORT}:${IAM_PORT}"
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  hotel-service:
+    build: ./services/hotel-service
+    container_name: hb-hotel
+    env_file: .env
+    environment:
+      PORT: ${HOTEL_PORT}
+    ports:
+      - "${HOTEL_PORT}:${HOTEL_PORT}"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  comments-service:
+    build: ./services/comments-service
+    container_name: hb-comments
+    env_file: .env
+    environment:
+      PORT: ${COMMENTS_PORT}
+    ports:
+      - "${COMMENTS_PORT}:${COMMENTS_PORT}"
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  notification-service:
+    build: ./services/notification-service
+    container_name: hb-notification
+    env_file: .env
+    environment:
+      PORT: ${NOTIFICATION_PORT}
+    ports:
+      - "${NOTIFICATION_PORT}:${NOTIFICATION_PORT}"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  ai-agent-service:
+    build: ./services/ai-agent-service
+    container_name: hb-ai-agent
+    env_file: .env
+    environment:
+      PORT: ${AI_AGENT_PORT}
+    ports:
+      - "${AI_AGENT_PORT}:${AI_AGENT_PORT}"
+    depends_on:
+      - hotel-service
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: hb-gateway
+    env_file: .env
+    environment:
+      PORT: ${API_GATEWAY_PORT}
+    ports:
+      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
+    depends_on:
+      - iam-service
+      - hotel-service
+      - comments-service
+      - notification-service
+      - ai-agent-service
+
+  frontend:
+    build: ./frontend
+    container_name: hb-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - api-gateway
+
+volumes:
+  mongo_data:

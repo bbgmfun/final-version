@@ -1,0 +1,80 @@
+openapi: 3.0.3
+info:
+  title: Aurora Stays API
+  version: "1.0.0"
+  description: OpenAPI spec (partial) for the Aurora Stays hotel booking API (core endpoints)
+servers:
+  - url: https://api-gateway.mangowater-b28dd996.swedencentral.azurecontainerapps.io/v1
+
+paths:
+  /search:
+    get:
+      summary: Search hotels
+      parameters:
+        - in: query
+          name: destination
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: start
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end
+          required: true
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: guests
+          required: false
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Search results
+  /hotels/{id}:
+    get:
+      summary: Get hotel details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Hotel detail
+  /hotels/{id}/book:
+    post:
+      summary: Book a hotel
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start:
+                  type: string
+                  format: date
+                end:
+                  type: string
+                  format: date
+                guests:
+                  type: integer
+                roomType:
+                  type: string
+      responses:
+        '200':
+          description: Booking confirmation
